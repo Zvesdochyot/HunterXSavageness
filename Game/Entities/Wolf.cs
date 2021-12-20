@@ -18,13 +18,17 @@ public class Wolf : NpcBase
     protected override float WanderingSpeed => 12f;
 
     protected override float RunningSpeed => 14f;
+    
+    public override bool IsDead { get; protected set; }
 
     protected override Region SpawnArea { get; }
 
     protected override FlockBehaviorBase Behavior { get; } = new AvoidanceBehavior();
 
-    protected override float ActivationRadius { get; }
-    
+    protected override float ActivationRadius => 200f;
+
+    private float _healthAmount = 100f;
+
     public Wolf(Region spawnArea)
     {
         SpawnArea = spawnArea;
@@ -41,5 +45,21 @@ public class Wolf : NpcBase
             OutlineColor = Color.Red,
             OutlineThickness = 2f
         };
+    }
+    
+    public override void FixedUpdate()
+    {
+        FeelHungry();
+    }
+    
+    private void FeelHungry()
+    {
+        if (_healthAmount <= 0)
+        {
+            IsDead = true;
+            RemoveAgent(this);
+        }
+
+        _healthAmount -= 0.1f;
     }
 }

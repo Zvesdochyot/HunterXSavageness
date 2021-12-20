@@ -18,13 +18,15 @@ public class Hare : NpcBase
     protected override float WanderingSpeed => 12f;
 
     protected override float RunningSpeed => 15f;
+    
+    public override bool IsDead { get; protected set; }
 
     protected override Region SpawnArea { get; }
     
     protected override FlockBehaviorBase Behavior { get; } = new AvoidanceBehavior();
 
     protected override float ActivationRadius { get; }
-    
+
     public Hare(Region spawnArea)
     {
         SpawnArea = spawnArea;
@@ -41,5 +43,10 @@ public class Hare : NpcBase
             OutlineColor = Color.Blue,
             OutlineThickness = 2f
         };
+    }
+    
+    public override void FixedUpdate()
+    {
+        return;
     }
 }

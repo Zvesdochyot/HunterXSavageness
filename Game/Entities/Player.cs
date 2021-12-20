@@ -15,16 +15,16 @@ public class Player : EntityBase
     
     protected override float WanderingSpeed => 200f;
     
-    protected override float RunningSpeed => 12f; // Let it be for future mechanics
+    protected override float RunningSpeed => 200f; // Let it be for future mechanics
 
-    private Vector2f _lastRecordedMousePosition;
-    
+    public override bool IsDead { get; protected set; } = false;
+
     public Player()
     {
         float triangleRadius = GameSettings.GetTriangleCircumradius();
         GameObject = new CircleShape(triangleRadius, 3)
         {
-            Position = new Vector2f(), // center of the map
+            Position = new Vector2f(), // Center of the map
             Origin = new Vector2f(triangleRadius, triangleRadius), // Origin in the center of the triangle  
             FillColor = GameRenderer.FieldColor,
             OutlineColor = Color.Magenta,
@@ -34,13 +34,12 @@ public class Player : EntityBase
 
     public void HandleRotation(Vector2f mousePosition)
     {
-        _lastRecordedMousePosition = mousePosition;
         GameObject.Rotation = GameObject.Position.GetRotationAngle(mousePosition) + 90; // + 90 because of triangle shape
     }
     
-    public void HandleMovement()
+    public void HandleMovement(Vector2f mousePosition)
     {
-        var destinationPoint = _lastRecordedMousePosition - GameObject.Position;
+        var destinationPoint = mousePosition - GameObject.Position;
         if (destinationPoint.GetMagnitude() < 2f)
         {
             // Do nothing, we are already at destination point

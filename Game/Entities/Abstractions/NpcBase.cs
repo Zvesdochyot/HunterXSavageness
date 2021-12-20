@@ -31,7 +31,7 @@ public abstract class NpcBase : EntityBase
         Agents.Add(_agent);
     }
 
-    public void Update()
+    public void FixedUpdateAgent()
     {
         var context = GetNearbyEntities(_agent);
         var move = Behavior.CalculateMove(_agent, context);
@@ -42,7 +42,15 @@ public abstract class NpcBase : EntityBase
         }
         _agent.Move(move);
     }
-
+    
+    public abstract void FixedUpdate();
+    
+    protected static void RemoveAgent(NpcBase agentToDestroy)
+    {
+        Agents.Remove(agentToDestroy._agent);
+        agentToDestroy.GameObject.Dispose();
+    }
+    
     private static List<NpcBase> GetNearbyEntities(FlockAgent agent)
     {
         var context = new List<NpcBase>();

@@ -18,6 +18,8 @@ public sealed class Deer : NpcBase
     protected override float WanderingSpeed => 8f;
 
     protected override float RunningSpeed => 10f;
+    
+    public override bool IsDead { get; protected set; }
 
     protected override Region SpawnArea { get; }
 
@@ -26,7 +28,7 @@ public sealed class Deer : NpcBase
         new[] { 10f, 3f, 3f, 5f });
     
     protected override float ActivationRadius { get; }
-
+    
     public Deer(Region spawnArea)
     {
         SpawnArea = spawnArea;
@@ -43,5 +45,10 @@ public sealed class Deer : NpcBase
             OutlineColor = Color.Green,
             OutlineThickness = 2f
         };
+    }
+    
+    public override void FixedUpdate()
+    {
+        return;
     }
 }

@@ -14,14 +14,11 @@ public class GameLoop
     private readonly RenderWindow _window;
     private readonly GameSettings _settings;
     private readonly Shape _fieldBorders;
-    
+
     private readonly Player _player;
-    private readonly Hare[] _hares;
-    private readonly Deer[] _deer;
-    private readonly Wolf[] _wolves;
+    private readonly List<EntityBase> _entities = new(64);
     
-    private readonly List<NpcBase> _npcs;
-    private readonly List<Shape> _renderTargets;
+    private Vector2f _lastRecordedMousePosition;
     
     public GameLoop(RenderWindow window)
     {
@@ -32,50 +29,49 @@ public class GameLoop
             Position = _settings.FieldBorders.StartPoint,
             FillColor = GameRenderer.FieldColor
         };
-            
+
         _player = new Player();
         
-        _hares = new Hare[GameSettings.HareCount];
+        _entities.Add(_player);
+
         for (int i = 0; i < GameSettings.HareCount; i++)
         {
-            _hares[i] = new Hare(_settings.HaresSpawn);
+            _entities.Add(new Hare(_settings.HaresSpawn));
         }
         
-        _deer = new Deer[GameSettings.DeerCount];
         for (int i = 0; i < GameSettings.DeerCount; i++)
         {
-            _deer[i] = new Deer(_settings.DeerSpawn);
+            _entities.Add(new Deer(_settings.DeerSpawn));
         }
         
-        _wolves = new Wolf[GameSettings.WolfCount];
         for (int i = 0; i < GameSettings.WolfCount; i++)
         {
-            _wolves[i] = new Wolf(_settings.WolvesSpawn);
+            _entities.Add(new Wolf(_settings.WolvesSpawn));
         }
-        
-        _renderTargets = new List<Shape> { _fieldBorders, _player.GameObject }
-            .Concat(_hares.Select(target => target.GameObject))
-            .Concat(_wolves.Select(target => target.GameObject))
-            .Concat(_deer.Select(target => target.GameObject)).ToList();
-        _npcs = new List<NpcBase>().Concat(_hares).Concat(_wolves).Concat(_deer).ToList();
-
     }
     
     public void FixedUpdate()
     {
         while (_window.IsOpen)
         {
-            _npcs.ForEach(target => target.Update());
+            _entities.ForEach(target => (target as NpcBase)?.FixedUpdateAgent());
+            _entities.ForEach(target => (target as NpcBase)?.FixedUpdate());
+
+            _entities.RemoveAll(target => target.IsDead);
             
-            GameRenderer.RenderFrame(_window, _renderTargets);
+            GameRenderer.RenderFrame(_window, _entities.Select(target => target.GameObject), _fieldBorders);
         }
     }
 
-    public void OnMouseMoved(Vector2f mousePosition) => _player.HandleRotation(mousePosition);
+    public void OnMouseMoved(Vector2f mousePosition)
+    {
+        _lastRecordedMousePosition = mousePosition;
+        _player.HandleRotation(mousePosition);
+    }
 
     public void OnKeyPressed()
     {
-        _player.HandleMovement();
+        _player.HandleMovement(_lastRecordedMousePosition);
         _settings.GameView.Center = _player.GameObject.Position;
         _window.SetView(_settings.GameView);
     }

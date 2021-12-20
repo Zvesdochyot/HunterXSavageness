@@ -6,7 +6,7 @@ namespace HunterXSavageness.Game;
 
 public class GameSettings
 {
-    public const uint HareCount = 10, DeerCount = 20, WolfCount = 5;
+    public const uint HareCount = 10, DeerCount = 50, WolfCount = 5;
 
     public static float FieldWidth { get; private set; }
     

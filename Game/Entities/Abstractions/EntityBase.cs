@@ -14,4 +14,6 @@ public abstract class EntityBase
     protected abstract float WanderingSpeed { get; }
     
     protected abstract float RunningSpeed { get; }
+    
+    public abstract bool IsDead { get; protected set; }
 }
