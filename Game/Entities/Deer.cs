@@ -13,7 +13,7 @@ public sealed class Deer : NpcBase
 
     public override EntityType Type => EntityType.Deer;
 
-    public override Vector2f Velocity { get; } = new();
+    public override Vector2f Velocity { get; set; } = new(5, 5);
 
     protected override float WanderingSpeed => 8f;
 
@@ -49,6 +49,6 @@ public sealed class Deer : NpcBase
     
     public override void FixedUpdate()
     {
-        return;
+        GameObject.Position += Velocity * GameLoop.DeltaTime;
     }
 }

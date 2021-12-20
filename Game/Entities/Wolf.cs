@@ -13,7 +13,7 @@ public class Wolf : NpcBase
     
     public override EntityType Type => EntityType.Wolf;
 
-    public override Vector2f Velocity { get; } = new();
+    public override Vector2f Velocity { get; set; } = new();
 
     protected override float WanderingSpeed => 12f;
 
@@ -49,6 +49,7 @@ public class Wolf : NpcBase
     
     public override void FixedUpdate()
     {
+        GameObject.Position += Velocity * GameLoop.DeltaTime;
         FeelHungry();
     }
     

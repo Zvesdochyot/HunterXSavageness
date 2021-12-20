@@ -9,7 +9,7 @@ public abstract class EntityBase
     
     public abstract EntityType Type { get; }
     
-    public abstract Vector2f Velocity { get; }
+    public abstract Vector2f Velocity { get; set; }
 
     protected abstract float WanderingSpeed { get; }
     

@@ -19,6 +19,6 @@ public class FlockAgent
         {
             Entity.GameObject.Rotation = Entity.Velocity.GetRotationAngle(velocity) + 90; // + 90 because of triangle shape
         }
-        Entity.GameObject.Position += velocity * GameLoop.DeltaTime;
+        Entity.Velocity = velocity;
     }
 }
