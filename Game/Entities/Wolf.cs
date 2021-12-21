@@ -15,9 +15,9 @@ public class Wolf : NpcBase
 
     public override float WanderingSpeed => 0.9f;
 
-    public override float RunningSpeed => 1f;
+    public override float RunningSpeed => 1.3f;
     
-    public override Vector2f Velocity { get; set; } = new();
+    public override Vector2f Velocity { get; set; }
     
     public override bool IsDead { get; protected set; }
     
@@ -25,9 +25,11 @@ public class Wolf : NpcBase
     
     protected override Region SpawnArea { get; }
 
-    protected override FlockBehaviorBase Behavior { get; } = new AvoidanceBehavior();
+    protected override FlockBehaviorBase Behavior { get; } = new SearchVictimBehavior();
 
     private float _healthAmount = 100f;
+    private bool _isSearching = true;
+    private Vector2f _destinationPoint;
 
     public Wolf(Region spawnArea)
     {
@@ -45,13 +47,21 @@ public class Wolf : NpcBase
             OutlineColor = Color.Red,
             OutlineThickness = 2f
         };
+
+        _destinationPoint = GameSettings.GetRandomPointWithinCircle();
     }
     
     public override void FixedUpdate()
     {
-        GameObject.Position += Velocity * GameLoop.DeltaTime;
-        HandleIfOutsideCircle();
         KillIfVeryHungry();
+        HandleIfOutsideCircle();
+        
+        // if (_isSearching)
+        // {
+        //     Velocity = SearchVictim();
+        // }
+        
+        GameObject.Position += Velocity * GameLoop.DeltaTime;
     }
     
     private void KillIfVeryHungry()
@@ -62,6 +72,6 @@ public class Wolf : NpcBase
             RemoveAgent(this);
         }
 
-        _healthAmount -= 0.01f;
+        _healthAmount -= 0.005f;
     }
 }

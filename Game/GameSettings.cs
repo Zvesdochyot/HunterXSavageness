@@ -6,7 +6,7 @@ namespace HunterXSavageness.Game;
 
 public class GameSettings
 {
-    public const uint HareCount = 20, DeerCount = 70, WolfCount = 8;
+    public const uint HareCount = 20, DeerCount = 30, WolfCount = 8;
 
     public static float FieldRadius { get; private set; }
 
@@ -26,12 +26,12 @@ public class GameSettings
         FieldRadius = window.Size.X;
         
         const float viewMultiplier = 1.5f;
-        GameView = new View(new Vector2f(centerX, centerY),
-            new Vector2f(viewMultiplier * window.Size.X, viewMultiplier * window.Size.Y));
+        GameView = new View(new Vector2f(centerX, centerY), new Vector2f(3 * window.Size.X, 3 * window.Size.Y));
+            // new Vector2f(viewMultiplier * window.Size.X, viewMultiplier * window.Size.Y));
         window.SetView(GameView);
 
-        float startX = -window.Size.X / 1.5f, startY = -window.Size.Y / 1.5f;
-        float endX = window.Size.X / 1.5f, endY = window.Size.Y / 1.5f;
+        float startX = -window.Size.X / 3f, startY = -window.Size.Y / 3f;
+        float endX = window.Size.X / 3f, endY = window.Size.Y / 3f;
         
         HaresSpawn = new Region(startX, centerY, centerX, endY);
         DeerSpawn = new Region(startX, startY, endX, centerY);
@@ -43,4 +43,15 @@ public class GameSettings
     public static float GetTriangleCircumradius() => (float) (Math.Sqrt(3) / 3 * SideLength);
 
     public static float GetDiagonal() => (float) (2 * (Math.Sqrt(3) / 3) * SideLength);
+    
+    public static Vector2f GetRandomPointWithinCircle()
+    {
+        double alpha = 2 * Math.PI * GameLoop.RandomGenerator.NextDouble();
+
+        float radius = FieldRadius * (float) Math.Sqrt(GameLoop.RandomGenerator.NextSingle());
+
+        float x = radius * (float) Math.Cos(alpha);
+        float y = radius * (float) Math.Sin(alpha);
+        return new Vector2f(x, y);
+    }
 }

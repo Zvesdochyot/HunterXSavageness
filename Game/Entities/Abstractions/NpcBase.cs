@@ -16,8 +16,8 @@ public abstract class NpcBase : EntityBase
     private readonly FlockAgent _agent;
     private static readonly List<FlockAgent> Agents = new();
     
-    private const float DriveFactor = 20f;
-    private const float MaxSpeed = 100f;
+    private const float DriveFactor = 30f;
+    private const float MaxSpeed = 52f;
     private const float SquaredMaxSpeed = MaxSpeed * MaxSpeed;
 
     private const float CrossingThreshold = 20f;
@@ -34,10 +34,12 @@ public abstract class NpcBase : EntityBase
         var context = GetNearbyEntities(_agent);
         var move = Behavior.CalculateMove(_agent, context);
         move *= DriveFactor;
+        
         if (move.GetSquaredMagnitude() > SquaredMaxSpeed)
         {
             move = move.GetNormalized() * MaxSpeed;
         }
+
         _agent.Move(move);
     }
     

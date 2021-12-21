@@ -1,4 +1,5 @@
-﻿using HunterXSavageness.Game.Entities.Abstractions;
+﻿using HunterXSavageness.Game.Entities;
+using HunterXSavageness.Game.Entities.Abstractions;
 using HunterXSavageness.Game.Helpers;
 using SFML.System;
 
@@ -15,10 +16,6 @@ public class FlockAgent
     
     public void Move(Vector2f velocity)
     {
-        if (velocity != Vector2FExtension.Zero)
-        {
-            Entity.GameObject.Rotation = Entity.Velocity.GetRotationAngle(velocity) + 90; // + 90 because of triangle shape
-        }
         Entity.Velocity = velocity;
     }
 }

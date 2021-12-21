@@ -11,9 +11,9 @@ public class Player : EntityBase
     
     public override EntityType Type => EntityType.Player;
 
-    public override float WanderingSpeed => 150f;
+    public override float WanderingSpeed => 40f;
     
-    public override float RunningSpeed => 150f; // Let it be for future mechanics
+    public override float RunningSpeed => 40f; // Let it be for future mechanics
     
     public override Vector2f Velocity { get; set; } = new();
     

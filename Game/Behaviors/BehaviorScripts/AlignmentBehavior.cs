@@ -1,4 +1,6 @@
-﻿using HunterXSavageness.Game.Entities.Abstractions;
+﻿using HunterXSavageness.Game.Entities;
+using HunterXSavageness.Game.Entities.Abstractions;
+using HunterXSavageness.Game.Helpers;
 using SFML.System;
 
 namespace HunterXSavageness.Game.Behaviors.BehaviorScripts;
