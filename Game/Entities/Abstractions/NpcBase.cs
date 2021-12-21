@@ -5,28 +5,26 @@ namespace HunterXSavageness.Game.Entities.Abstractions;
 
 public abstract class NpcBase : EntityBase
 {
-    public float SquareAvoidanceRadius { get; }
+    public float SquaredAvoidanceRadius => CrossingThreshold * _crossingThresholdMultiplier * _crossingThresholdMultiplier;
     
+    public abstract float ActivationRadius { get; }
+
     protected abstract Region SpawnArea { get; }
-    
+
     protected abstract FlockBehaviorBase Behavior { get; }
     
-    protected abstract float ActivationRadius { get; }
-
     private readonly FlockAgent _agent;
     private static readonly List<FlockAgent> Agents = new();
     
-    private const float MaxSpeed = 50f;
-    private const float DriveFactor = 5f;
-    private const float SquareMaxSpeed = MaxSpeed * MaxSpeed;
+    private const float DriveFactor = 20f;
+    private const float MaxSpeed = 100f;
+    private const float SquaredMaxSpeed = MaxSpeed * MaxSpeed;
 
-    private const float NeighborRadius = 2f;
-    private readonly float _avoidanceRadiusMultiplier = 2.5f * GameSettings.SideLength;
+    private const float CrossingThreshold = 20f;
+    private readonly float _crossingThresholdMultiplier = GameSettings.GetDiagonal();
 
     protected NpcBase()
     {
-        SquareAvoidanceRadius = _avoidanceRadiusMultiplier * _avoidanceRadiusMultiplier;
-        
         _agent = new FlockAgent(this);
         Agents.Add(_agent);
     }
@@ -36,7 +34,7 @@ public abstract class NpcBase : EntityBase
         var context = GetNearbyEntities(_agent);
         var move = Behavior.CalculateMove(_agent, context);
         move *= DriveFactor;
-        if (move.GetSquaredMagnitude() > SquareMaxSpeed)
+        if (move.GetSquaredMagnitude() > SquaredMaxSpeed)
         {
             move = move.GetNormalized() * MaxSpeed;
         }
@@ -56,10 +54,10 @@ public abstract class NpcBase : EntityBase
         var context = new List<NpcBase>();
         var boundingBox = agent.Entity.GameObject.GetGlobalBounds();
         // Expand the boundaries a bit for more greedy finding neighbors
-        boundingBox.Left -= NeighborRadius;
-        boundingBox.Top -= NeighborRadius;
-        boundingBox.Width += 2 * NeighborRadius;
-        boundingBox.Height += 2 * NeighborRadius;
+        boundingBox.Left -= CrossingThreshold;
+        boundingBox.Top -= CrossingThreshold;
+        boundingBox.Width += 2 * CrossingThreshold;
+        boundingBox.Height += 2 * CrossingThreshold;
         
         foreach (var other in Agents)
         {

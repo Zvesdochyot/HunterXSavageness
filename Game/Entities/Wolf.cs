@@ -20,12 +20,12 @@ public class Wolf : NpcBase
     protected override float RunningSpeed => 14f;
     
     public override bool IsDead { get; protected set; }
-
+    
+    public override float ActivationRadius { get; } = 50 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
+    
     protected override Region SpawnArea { get; }
 
     protected override FlockBehaviorBase Behavior { get; } = new AvoidanceBehavior();
-
-    protected override float ActivationRadius => 200f;
 
     private float _healthAmount = 100f;
 
@@ -61,6 +61,6 @@ public class Wolf : NpcBase
             RemoveAgent(this);
         }
 
-        _healthAmount -= 0.1f;
+        _healthAmount -= 0.01f;
     }
 }

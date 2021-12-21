@@ -21,11 +21,11 @@ public class Hare : NpcBase
     
     public override bool IsDead { get; protected set; }
 
+    public override float ActivationRadius { get; } = 100 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
+    
     protected override Region SpawnArea { get; }
     
     protected override FlockBehaviorBase Behavior { get; } = new AvoidanceBehavior();
-
-    protected override float ActivationRadius { get; }
 
     public Hare(Region spawnArea)
     {

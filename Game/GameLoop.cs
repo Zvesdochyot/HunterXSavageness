@@ -24,9 +24,10 @@ public class GameLoop
     {
         _window = window;
         _settings = new GameSettings(window);
-        _fieldBorders = new RectangleShape(_settings.FieldBorders.EndPoint - _settings.FieldBorders.StartPoint)
+        
+        _fieldBorders = new CircleShape(GameSettings.FieldRadius, 200)
         {
-            Position = _settings.FieldBorders.StartPoint,
+            Position = new Vector2f(-GameSettings.FieldRadius, -GameSettings.FieldRadius),
             FillColor = GameRenderer.FieldColor
         };
 

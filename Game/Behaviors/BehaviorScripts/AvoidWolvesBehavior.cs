@@ -22,7 +22,7 @@ public class AvoidWolvesBehavior : FlockBehaviorBase
         foreach (var other in context.Where(other => other.Type == EntityType.Wolf))
         {
             var resultingVector = agent.Entity.GameObject.Position - other.GameObject.Position;
-            if (resultingVector.GetSquaredMagnitude() >= agent.Entity.SquareAvoidanceRadius) continue;
+            if (resultingVector.GetSquaredMagnitude() >= agent.Entity.ActivationRadius) continue;
             avoidanceMove += resultingVector;
             ++groupCount;
         }
