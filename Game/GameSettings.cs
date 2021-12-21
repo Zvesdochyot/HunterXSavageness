@@ -6,7 +6,7 @@ namespace HunterXSavageness.Game;
 
 public class GameSettings
 {
-    public const uint HareCount = 20, DeerCount = 30, WolfCount = 8;
+    public const uint HareCount = 20, DeerCount = 40, WolfCount = 8;
 
     public static float FieldRadius { get; private set; }
 
@@ -32,8 +32,8 @@ public class GameSettings
             new Vector2f(viewMultiplier * window.Size.X, viewMultiplier * window.Size.Y));
         window.SetView(GameView);
 
-        float startX = -window.Size.X / 3f, startY = -window.Size.Y / 3f;
-        float endX = window.Size.X / 3f, endY = window.Size.Y / 3f;
+        float startX = -window.Size.X / 4f, startY = -window.Size.Y / 4f;
+        float endX = window.Size.X / 4f, endY = window.Size.Y / 4f;
         
         HaresSpawn = new Region(startX, centerY, centerX, endY);
         DeerSpawn = new Region(startX, startY, endX, centerY);

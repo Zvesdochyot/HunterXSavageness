@@ -1,4 +1,5 @@
-﻿using HunterXSavageness.Game.Guns.Abstractions;
+﻿using HunterXSavageness.Game.Entities.Abstractions;
+using HunterXSavageness.Game.Guns.Abstractions;
 using HunterXSavageness.Game.Helpers;
 using HunterXSavageness.Game.Particles.Abstractions;
 using SFML.Graphics;
@@ -10,7 +11,7 @@ public sealed class Bullet : ParticleBase
 {
     public override Shape GameObject { get; }
     
-    public override bool IsDestroyed { get; protected set; }
+    public override bool IsDestroyed { get; set; }
     
     protected override Vector2f InitialPosition { get; set; }
     
@@ -27,7 +28,7 @@ public sealed class Bullet : ParticleBase
             Position = initialPosition,
             FillColor = Color.Yellow
         };
-        
+
         InitialPosition = initialPosition;
         Destination = destination;
         _gun = gun;
@@ -55,6 +56,22 @@ public sealed class Bullet : ParticleBase
         {
             RemoveBullet();
         }
+    }
+    
+    public List<NpcBase> GetNearbyEntities(List<NpcBase> entities)
+    {
+        var context = new List<NpcBase>();
+        var boundingBulletBox = GameObject.GetGlobalBounds();
+
+        foreach (var entity in entities)
+        {
+            if (boundingBulletBox.Intersects(entity.GameObject.GetGlobalBounds()))
+            {
+                context.Add(entity);
+            }
+        }
+        
+        return context;
     }
     
     private void HandleIfOutsideCircle()

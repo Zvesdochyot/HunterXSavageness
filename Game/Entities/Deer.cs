@@ -19,15 +19,15 @@ public sealed class Deer : NpcBase
     
     public override Vector2f Velocity { get; set; }
 
-    public override bool IsDead { get; protected set; }
+    public override bool IsDead { get; set; }
 
-    public override float ActivationRadius { get; } = 300 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
+    public override float ActivationRadius { get; } = 1.3f * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
     
     protected override Region SpawnArea { get; }
 
     protected override FlockBehaviorBase Behavior { get; } = new CompositeBehavior(
-        new FlockBehaviorBase[] { new AvoidanceBehavior(), new SteeredCohesionBehavior(), new AlignmentBehavior(), new AvoidWolvesBehavior(), new StayInCircleBehavior() },
-        new[] { 0.5f, 6f, 1f, 1f, 1f });
+        new FlockBehaviorBase[] { new SteeredCohesionBehavior(), new AlignmentBehavior(), new AvoidWolvesBehavior(), new StayInCircleBehavior() },
+        new[] { 1f, 1f, 5f, 1f });
 
     public Deer(Region spawnArea)
     {

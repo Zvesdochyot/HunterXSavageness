@@ -19,15 +19,15 @@ public class Hare : NpcBase
     
     public override Vector2f Velocity { get; set; }
     
-    public override bool IsDead { get; protected set; }
+    public override bool IsDead { get; set; }
 
-    public override float ActivationRadius { get; } = 150 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
+    public override float ActivationRadius { get; } = 1.3f * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
     
     protected override Region SpawnArea { get; }
     
     protected override FlockBehaviorBase Behavior { get; } = new CompositeBehavior(
-        new FlockBehaviorBase[] { new SearchVictimBehavior(), new AvoidEveryoneBehavior(), new StayInCircleBehavior() },
-        new[] { 1f, 1f, 1f });
+        new FlockBehaviorBase[] { new SearchVictimBehavior(), new AvoidanceBehavior(), new AvoidEveryoneBehavior(), new StayInCircleBehavior() },
+        new[] { 1f, 3f, 5f, 1f });
 
     public Hare(Region spawnArea)
     {

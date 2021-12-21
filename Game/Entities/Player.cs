@@ -11,13 +11,13 @@ public class Player : EntityBase
 {
     public override Shape GameObject { get; }
     
-    public override float WanderingSpeed => 4000f;
+    public override float WanderingSpeed => 40f;
     
     public override float RunningSpeed => 40f; // Let it be for future mechanics
     
     public override Vector2f Velocity { get; set; } = new();
-    
-    public override bool IsDead { get; protected set; } = false;
+
+    public override bool IsDead { get; set; } = false;
 
     public GunBase Gun { get; }
     

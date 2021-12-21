@@ -7,11 +7,13 @@ namespace HunterXSavageness.Game.Guns;
 public class Pistol : GunBase
 {
     public override float ShootingRange => 1000f;
-
-    public override List<Bullet> FiredBullets { get; } = new();
+    
+    public override List<Bullet> FiredBullets => _firedBullets;
 
     protected override uint BulletCount { get; set; } = 66;
-
+    
+    private volatile List<Bullet> _firedBullets = new();
+    
     public override void ShootOnce(Vector2f initialPosition, Vector2f destination)
     {
         if (BulletCount == 0)
@@ -20,6 +22,6 @@ public class Pistol : GunBase
         }
 
         --BulletCount;
-        FiredBullets.Add(new Bullet(initialPosition, destination, this));
+        _firedBullets.Add(new Bullet(initialPosition, destination, this));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HunterXSavageness.Game.Entities;
 using HunterXSavageness.Game.Entities.Abstractions;
+using HunterXSavageness.Game.Particles;
 using HunterXSavageness.Game.Particles.Abstractions;
 using SFML.Graphics;
 using SFML.System;
@@ -59,16 +60,58 @@ public class GameLoop
             _entities.ForEach(target => (target as NpcBase)?.FixedUpdateAgent());
             _entities.ForEach(target => target.FixedUpdate());
 
+            var wolfTargets = _entities.OfType<Wolf>();
+            foreach (var target in wolfTargets)
+            {
+                var entities = NpcBase.GetNearbyEntities(target)
+                    .Where(entity => entity.Type != NpcType.Wolf && !entity.IsDead).ToList();
+                
+                if (entities.Count == 0) continue;
+                var targetBound = target.GameObject.GetGlobalBounds();
+
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    if (entities[i].GameObject.GetGlobalBounds().Intersects(targetBound))
+                    {
+                        entities[i].IsDead = true;
+                        NpcBase.RemoveAgent(entities[i]);
+                    }
+                }
+            }
+
             _entities.RemoveAll(target => target.IsDead);
 
-            var particles = new List<ParticleBase>(32);
-            particles.AddRange(_player.Gun.FiredBullets);
+            for (int i = 0; i < _player.Gun.FiredBullets.Count; i++)
+            {
+                _player.Gun.FiredBullets[i].FixedUpdate();
+            }
+            
+            var npcs = _entities.OfType<NpcBase>().ToList();
+            foreach (var target in _player.Gun.FiredBullets)
+            {
+                var entities = target.GetNearbyEntities(npcs);
 
-            particles.ForEach(target => target.FixedUpdate());
-            particles.RemoveAll(target => target.IsDestroyed);
+                if (entities.Count == 0) continue;
+                var targetBound = target.GameObject.GetGlobalBounds();
+
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    if (entities[i].GameObject.GetGlobalBounds().Intersects(targetBound))
+                    {
+                        entities[i].IsDead = true;
+                        target.IsDestroyed = true;
+                        npcs.Remove(entities[i]);
+                        NpcBase.RemoveAgent(entities[i]);
+                        break;
+                    }
+                }
+            }
+            
+            _entities.RemoveAll(target => target.IsDead);
+            _player.Gun.FiredBullets.RemoveAll(target => target.IsDestroyed);
             
             var allTargets = _entities.Select(target => target.GameObject)
-                .Concat(particles.Select(target => target.GameObject));
+                .Concat(_player.Gun.FiredBullets.Select(target => target.GameObject));
             GameRenderer.RenderFrame(_window, allTargets, _fieldBorders);
         }
     }

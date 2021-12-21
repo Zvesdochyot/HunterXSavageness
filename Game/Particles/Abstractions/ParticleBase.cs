@@ -7,7 +7,7 @@ public abstract class ParticleBase
 {
     public abstract Shape GameObject { get; }
     
-    public abstract bool IsDestroyed { get; protected set; }
+    public abstract bool IsDestroyed { get;  set; }
 
     protected abstract Vector2f InitialPosition { get; set; }
     

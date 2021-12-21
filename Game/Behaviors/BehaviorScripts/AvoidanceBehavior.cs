@@ -19,7 +19,7 @@ public class AvoidanceBehavior : FlockBehaviorBase
         foreach (var other in context.Where(other => agent.Entity.Type == other.Type))
         {
             var resultingVector = other.GameObject.Position - agent.Entity.GameObject.Position;
-            if (resultingVector.GetSquaredMagnitude() >= agent.Entity.SquaredAvoidanceRadius) continue;
+            if (resultingVector.GetSquaredMagnitude() >= agent.Entity.SquaredFriendlyAvoidanceRadius) continue;
             avoidanceMove += -resultingVector;
             ++groupCount;
         }

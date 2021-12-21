@@ -5,8 +5,8 @@ namespace HunterXSavageness.Game.Entities.Abstractions;
 
 public abstract class NpcBase : EntityBase
 {
-    public float SquaredAvoidanceRadius => CrossingThreshold * _crossingThresholdMultiplier * _crossingThresholdMultiplier;
-    
+    public float SquaredFriendlyAvoidanceRadius => FriendlyCrossingThreshold * FriendlyCrossingThreshold;
+
     public abstract NpcType Type { get; }
     
     public abstract float ActivationRadius { get; }
@@ -22,9 +22,9 @@ public abstract class NpcBase : EntityBase
     private const float MaxSpeed = 52f;
     private const float SquaredMaxSpeed = MaxSpeed * MaxSpeed;
 
-    private const float CrossingThreshold = 20f;
-    private const float FriendlyCrossingThreshold = 7f;
-    private readonly float _crossingThresholdMultiplier = GameSettings.GetDiagonal();
+    private const float CrossingThreshold = 1.5f;
+    private static readonly float ContextCrossingThreshold = 2 * CrossingThreshold * GameSettings.GetDiagonal();
+    private static readonly float FriendlyCrossingThreshold = CrossingThreshold * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
 
     protected NpcBase()
     {
@@ -34,7 +34,7 @@ public abstract class NpcBase : EntityBase
 
     public void FixedUpdateAgent()
     {
-        var context = GetNearbyEntities(_agent);
+        var context = GetNearbyEntities(this);
         var move = Behavior.CalculateMove(_agent, context);
         move *= DriveFactor;
         
@@ -54,25 +54,25 @@ public abstract class NpcBase : EntityBase
         RemoveAgent(this);
     }
     
-    protected static void RemoveAgent(NpcBase agentToDestroy)
+    public static void RemoveAgent(NpcBase agentToDestroy)
     {
         Agents.Remove(agentToDestroy._agent);
         agentToDestroy.GameObject.Dispose();
     }
     
-    private static List<NpcBase> GetNearbyEntities(FlockAgent agent)
+    public static List<NpcBase> GetNearbyEntities(NpcBase agent)
     {
         var context = new List<NpcBase>();
-        var boundingBox = agent.Entity.GameObject.GetGlobalBounds();
+        var boundingBox = agent.GameObject.GetGlobalBounds();
         // Expand the boundaries a bit for more greedy finding neighbors
-        boundingBox.Left -= FriendlyCrossingThreshold;
-        boundingBox.Top -= FriendlyCrossingThreshold;
-        boundingBox.Width += 2 * FriendlyCrossingThreshold;
-        boundingBox.Height += 2 * FriendlyCrossingThreshold;
+        boundingBox.Left -= ContextCrossingThreshold;
+        boundingBox.Top -= ContextCrossingThreshold;
+        boundingBox.Width += 2 * ContextCrossingThreshold;
+        boundingBox.Height += 2 * ContextCrossingThreshold;
         
         foreach (var other in Agents)
         {
-            if (agent == other) continue;
+            if (agent == other.Entity) continue;
             if (boundingBox.Intersects(other.Entity.GameObject.GetGlobalBounds()))
             {
                 context.Add(other.Entity);
