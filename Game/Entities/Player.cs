@@ -11,12 +11,12 @@ public class Player : EntityBase
     
     public override EntityType Type => EntityType.Player;
 
+    public override float WanderingSpeed => 150f;
+    
+    public override float RunningSpeed => 150f; // Let it be for future mechanics
+    
     public override Vector2f Velocity { get; set; } = new();
     
-    protected override float WanderingSpeed => 200f;
-    
-    protected override float RunningSpeed => 200f; // Let it be for future mechanics
-
     public override bool IsDead { get; protected set; } = false;
 
     public Player()
@@ -31,7 +31,12 @@ public class Player : EntityBase
             OutlineThickness = 2f
         };
     }
-
+    
+    public override void FixedUpdate()
+    {
+        HandleIfOutsideCircle();
+    }
+    
     public void HandleRotation(Vector2f mousePosition)
     {
         GameObject.Rotation = GameObject.Position.GetRotationAngle(mousePosition) + 90; // + 90 because of triangle shape

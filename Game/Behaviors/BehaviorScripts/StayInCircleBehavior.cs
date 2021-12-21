@@ -6,7 +6,7 @@ namespace HunterXSavageness.Game.Behaviors.BehaviorScripts;
 
 public class StayInCircleBehavior : FlockBehaviorBase
 {
-    private readonly Vector2f _circleCenter = new();
+    private readonly Vector2f _circleCenter = Vector2FExtension.Zero;
     private readonly float _circleRadius = GameSettings.FieldRadius;
     
     public override Vector2f CalculateMove(FlockAgent agent, List<NpcBase> context)
@@ -19,6 +19,6 @@ public class StayInCircleBehavior : FlockBehaviorBase
             return Vector2FExtension.Zero;
         }
 
-        return centerOffset * t * t;
+        return centerOffset * t * t * agent.Entity.WanderingSpeed;
     }
 }

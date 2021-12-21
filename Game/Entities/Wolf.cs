@@ -13,11 +13,11 @@ public class Wolf : NpcBase
     
     public override EntityType Type => EntityType.Wolf;
 
+    public override float WanderingSpeed => 0.9f;
+
+    public override float RunningSpeed => 1f;
+    
     public override Vector2f Velocity { get; set; } = new();
-
-    protected override float WanderingSpeed => 12f;
-
-    protected override float RunningSpeed => 14f;
     
     public override bool IsDead { get; protected set; }
     
@@ -50,10 +50,11 @@ public class Wolf : NpcBase
     public override void FixedUpdate()
     {
         GameObject.Position += Velocity * GameLoop.DeltaTime;
-        FeelHungry();
+        HandleIfOutsideCircle();
+        KillIfVeryHungry();
     }
     
-    private void FeelHungry()
+    private void KillIfVeryHungry()
     {
         if (_healthAmount <= 0)
         {

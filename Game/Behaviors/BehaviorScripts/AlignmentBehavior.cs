@@ -27,6 +27,6 @@ public class AlignmentBehavior : FlockBehaviorBase
         }
         
         alignmentMove /= groupCount;
-        return alignmentMove;
+        return alignmentMove * agent.Entity.WanderingSpeed;
     }
 }

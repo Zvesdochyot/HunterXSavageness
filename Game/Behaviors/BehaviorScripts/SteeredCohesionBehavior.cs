@@ -32,6 +32,6 @@ public class SteeredCohesionBehavior : FlockBehaviorBase
         
         cohesionMove /= groupCount;
         cohesionMove = Vector2FExtension.SmoothDamp(agent.Entity.Velocity, cohesionMove, ref _currentVelocity, AgentSmoothTime);
-        return cohesionMove;
+        return cohesionMove * agent.Entity.WanderingSpeed;
     }
 }

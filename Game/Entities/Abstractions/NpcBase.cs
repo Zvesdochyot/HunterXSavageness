@@ -41,7 +41,13 @@ public abstract class NpcBase : EntityBase
         _agent.Move(move);
     }
     
-    public abstract void FixedUpdate();
+    protected override void HandleIfOutsideCircle()
+    {
+        float squaredRadius = GameSettings.FieldRadius * GameSettings.FieldRadius;
+        if (GameObject.Position.GetSquaredMagnitude() < squaredRadius) return;
+        IsDead = true;
+        RemoveAgent(this);
+    }
     
     protected static void RemoveAgent(NpcBase agentToDestroy)
     {

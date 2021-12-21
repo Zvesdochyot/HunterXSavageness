@@ -56,7 +56,7 @@ public class GameLoop
         while (_window.IsOpen)
         {
             _entities.ForEach(target => (target as NpcBase)?.FixedUpdateAgent());
-            _entities.ForEach(target => (target as NpcBase)?.FixedUpdate());
+            _entities.ForEach(target => target.FixedUpdate());
 
             _entities.RemoveAll(target => target.IsDead);
             

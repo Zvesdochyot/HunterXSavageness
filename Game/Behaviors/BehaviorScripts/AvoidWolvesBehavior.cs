@@ -7,8 +7,6 @@ namespace HunterXSavageness.Game.Behaviors.BehaviorScripts;
 
 public class AvoidWolvesBehavior : FlockBehaviorBase
 {
-    private const float SpeedMultiplayer = 2f;  
-    
     public override Vector2f CalculateMove(FlockAgent agent, List<NpcBase> context)
     {
         var avoidanceMove = new Vector2f();
@@ -32,7 +30,7 @@ public class AvoidWolvesBehavior : FlockBehaviorBase
             return avoidanceMove;
         }
         
-        // avoidanceMove /= groupCount;
-        return avoidanceMove * SpeedMultiplayer;
+        avoidanceMove /= groupCount;
+        return avoidanceMove * agent.Entity.RunningSpeed;
     }
 }

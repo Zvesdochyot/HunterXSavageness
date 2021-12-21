@@ -30,6 +30,6 @@ public class AvoidanceBehavior : FlockBehaviorBase
         }
         
         avoidanceMove /= groupCount;
-        return avoidanceMove;
+        return avoidanceMove * agent.Entity.WanderingSpeed;
     }
 }

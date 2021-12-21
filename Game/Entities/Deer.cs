@@ -13,12 +13,12 @@ public sealed class Deer : NpcBase
 
     public override EntityType Type => EntityType.Deer;
 
+    public override float WanderingSpeed => 0.8f;
+
+    public override float RunningSpeed => 0.9f;
+    
     public override Vector2f Velocity { get; set; }
 
-    protected override float WanderingSpeed => 50f;
-
-    protected override float RunningSpeed => 75f;
-    
     public override bool IsDead { get; protected set; }
 
     public override float ActivationRadius { get; } = 100 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
@@ -26,8 +26,8 @@ public sealed class Deer : NpcBase
     protected override Region SpawnArea { get; }
 
     protected override FlockBehaviorBase Behavior { get; } = new CompositeBehavior(
-        new FlockBehaviorBase[] { new AvoidanceBehavior(), new AlignmentBehavior(), new AlignmentBehavior(), new AvoidWolvesBehavior() },
-        new[] { 3f, 2f, 5f, 3f });
+        new FlockBehaviorBase[] { new AvoidanceBehavior(), new SteeredCohesionBehavior(), new AlignmentBehavior(), new StayInCircleBehavior() },
+        new[] { 3f, 6f, 5f, 1f });
 
     public Deer(Region spawnArea)
     {
@@ -50,5 +50,6 @@ public sealed class Deer : NpcBase
     public override void FixedUpdate()
     {
         GameObject.Position += Velocity * GameLoop.DeltaTime;
+        HandleIfOutsideCircle();
     }
 }
