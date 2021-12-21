@@ -10,8 +10,6 @@ public class GameSettings
 
     public static float FieldRadius { get; private set; }
 
-    public static float SideLength { get; private set; }
-    
     public View GameView { get; }
 
     public Region HaresSpawn { get; }
@@ -20,14 +18,18 @@ public class GameSettings
     
     public Region WolvesSpawn { get; }
     
+    public static Vector2f BulletSize { get; private set; }
+    
+    private static float SideLength { get; set; }
+    
     public GameSettings(RenderTarget window)
     {
         const float centerX = 0, centerY = 0;
         FieldRadius = window.Size.X;
         
-        const float viewMultiplier = 1.5f;
-        GameView = new View(new Vector2f(centerX, centerY), new Vector2f(3 * window.Size.X, 3 * window.Size.Y));
-            // new Vector2f(viewMultiplier * window.Size.X, viewMultiplier * window.Size.Y));
+        const float viewMultiplier = 1.2f;
+        GameView = new View(new Vector2f(centerX, centerY),
+            new Vector2f(viewMultiplier * window.Size.X, viewMultiplier * window.Size.Y));
         window.SetView(GameView);
 
         float startX = -window.Size.X / 3f, startY = -window.Size.Y / 3f;
@@ -37,6 +39,7 @@ public class GameSettings
         DeerSpawn = new Region(startX, startY, endX, centerY);
         WolvesSpawn = new Region(centerX, centerY, endX, endY);
         
+        BulletSize = new Vector2f(window.Size.X / 256f, window.Size.Y / 144f);
         SideLength = window.Size.X / 64f;
     }
 

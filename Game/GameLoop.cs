@@ -1,5 +1,6 @@
 ﻿using HunterXSavageness.Game.Entities;
 using HunterXSavageness.Game.Entities.Abstractions;
+using HunterXSavageness.Game.Particles.Abstractions;
 using SFML.Graphics;
 using SFML.System;
 
@@ -17,7 +18,7 @@ public class GameLoop
 
     private readonly Player _player;
     private readonly List<EntityBase> _entities = new(64);
-    
+
     private Vector2f _lastRecordedMousePosition;
     
     public GameLoop(RenderWindow window)
@@ -59,8 +60,16 @@ public class GameLoop
             _entities.ForEach(target => target.FixedUpdate());
 
             _entities.RemoveAll(target => target.IsDead);
+
+            var particles = new List<ParticleBase>(32);
+            particles.AddRange(_player.Gun.FiredBullets);
+
+            particles.ForEach(target => target.FixedUpdate());
+            particles.RemoveAll(target => target.IsDestroyed);
             
-            GameRenderer.RenderFrame(_window, _entities.Select(target => target.GameObject), _fieldBorders);
+            var allTargets = _entities.Select(target => target.GameObject)
+                .Concat(particles.Select(target => target.GameObject));
+            GameRenderer.RenderFrame(_window, allTargets, _fieldBorders);
         }
     }
 
@@ -70,7 +79,12 @@ public class GameLoop
         _player.HandleRotation(mousePosition);
     }
 
-    public void OnKeyPressed()
+    public void OnMouseKeyPressed(Vector2f mousePosition)
+    {
+        _player.HandleShooting(mousePosition);
+    }
+    
+    public void OnKeyboardKeyPressed()
     {
         _player.HandleMovement(_lastRecordedMousePosition);
         _settings.GameView.Center = _player.GameObject.Position;

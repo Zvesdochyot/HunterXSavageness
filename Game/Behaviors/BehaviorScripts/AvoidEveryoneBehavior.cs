@@ -1,11 +1,10 @@
-﻿using HunterXSavageness.Game.Entities;
-using HunterXSavageness.Game.Entities.Abstractions;
+﻿using HunterXSavageness.Game.Entities.Abstractions;
 using HunterXSavageness.Game.Helpers;
 using SFML.System;
 
 namespace HunterXSavageness.Game.Behaviors.BehaviorScripts;
 
-public class AvoidWolvesBehavior : FlockBehaviorBase
+public class AvoidEveryoneBehavior : FlockBehaviorBase
 {
     public override Vector2f CalculateMove(FlockAgent agent, List<NpcBase> context)
     {
@@ -17,7 +16,7 @@ public class AvoidWolvesBehavior : FlockBehaviorBase
         }
         
         int groupCount = 0;
-        foreach (var other in context.Where(other => other.Type == NpcType.Wolf))
+        foreach (var other in context)
         {
             var resultingVector = agent.Entity.GameObject.Position - other.GameObject.Position;
             if (resultingVector.GetSquaredMagnitude() >= agent.Entity.ActivationRadius) continue;

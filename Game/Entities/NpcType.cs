@@ -1,9 +1,8 @@
 ﻿namespace HunterXSavageness.Game.Entities;
 
-public enum EntityType
+public enum NpcType
 {
-    Player = 0,
-    Hare,
+    Hare = 0,
     Deer,
     Wolf
 }

@@ -21,7 +21,7 @@ public static class GameRenderer
         {
             window.Draw(target);
         }
-        
+
         window.Display();
         
         window.SetActive(false);

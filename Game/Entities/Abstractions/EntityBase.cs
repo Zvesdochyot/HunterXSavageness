@@ -7,9 +7,7 @@ namespace HunterXSavageness.Game.Entities.Abstractions;
 public abstract class EntityBase
 {
     public abstract Shape GameObject { get; }
-    
-    public abstract EntityType Type { get; }
-    
+
     public abstract float WanderingSpeed { get; }
     
     public abstract float RunningSpeed { get; }

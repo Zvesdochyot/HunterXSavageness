@@ -7,6 +7,8 @@ public abstract class NpcBase : EntityBase
 {
     public float SquaredAvoidanceRadius => CrossingThreshold * _crossingThresholdMultiplier * _crossingThresholdMultiplier;
     
+    public abstract NpcType Type { get; }
+    
     public abstract float ActivationRadius { get; }
 
     protected abstract Region SpawnArea { get; }
@@ -21,6 +23,7 @@ public abstract class NpcBase : EntityBase
     private const float SquaredMaxSpeed = MaxSpeed * MaxSpeed;
 
     private const float CrossingThreshold = 20f;
+    private const float FriendlyCrossingThreshold = 7f;
     private readonly float _crossingThresholdMultiplier = GameSettings.GetDiagonal();
 
     protected NpcBase()
@@ -62,10 +65,10 @@ public abstract class NpcBase : EntityBase
         var context = new List<NpcBase>();
         var boundingBox = agent.Entity.GameObject.GetGlobalBounds();
         // Expand the boundaries a bit for more greedy finding neighbors
-        boundingBox.Left -= CrossingThreshold;
-        boundingBox.Top -= CrossingThreshold;
-        boundingBox.Width += 2 * CrossingThreshold;
-        boundingBox.Height += 2 * CrossingThreshold;
+        boundingBox.Left -= FriendlyCrossingThreshold;
+        boundingBox.Top -= FriendlyCrossingThreshold;
+        boundingBox.Width += 2 * FriendlyCrossingThreshold;
+        boundingBox.Height += 2 * FriendlyCrossingThreshold;
         
         foreach (var other in Agents)
         {

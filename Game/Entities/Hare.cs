@@ -11,22 +11,22 @@ public class Hare : NpcBase
 {
     public override Shape GameObject { get; }
     
-    public override EntityType Type => EntityType.Hare;
+    public override NpcType Type => NpcType.Hare;
 
-    public override float WanderingSpeed => 0.3f;
+    public override float WanderingSpeed => 0.6f;
 
-    public override float RunningSpeed => 0.4f;
+    public override float RunningSpeed => 1.4f;
     
     public override Vector2f Velocity { get; set; }
     
     public override bool IsDead { get; protected set; }
 
-    public override float ActivationRadius { get; } = 100 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
+    public override float ActivationRadius { get; } = 150 * GameSettings.GetDiagonal() * GameSettings.GetDiagonal();
     
     protected override Region SpawnArea { get; }
     
     protected override FlockBehaviorBase Behavior { get; } = new CompositeBehavior(
-        new FlockBehaviorBase[] { new AlignmentBehavior(), new AvoidanceBehavior(), new StayInCircleBehavior() },
+        new FlockBehaviorBase[] { new SearchVictimBehavior(), new AvoidEveryoneBehavior(), new StayInCircleBehavior() },
         new[] { 1f, 1f, 1f });
 
     public Hare(Region spawnArea)

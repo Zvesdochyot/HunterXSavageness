@@ -50,13 +50,24 @@ internal static class GameClient
             var convertedVector = window.MapPixelToCoords(new Vector2i(eventArgs.X, eventArgs.Y));
             worker.OnMouseMoved(convertedVector);
         };
-
+        
+        window.MouseButtonPressed += (_, eventArgs) =>
+        {
+            switch (eventArgs.Button)
+            {
+                case Mouse.Button.Left:
+                    var convertedVector = window.MapPixelToCoords(new Vector2i(eventArgs.X, eventArgs.Y));
+                    worker.OnMouseKeyPressed(convertedVector);
+                    break;
+            }
+        };
+        
         window.KeyPressed += (_, eventArgs) =>
         {
             switch (eventArgs.Code)
             {
                 case Keyboard.Key.W:
-                    worker.OnKeyPressed();
+                    worker.OnKeyboardKeyPressed();
                     break;
             }
         };

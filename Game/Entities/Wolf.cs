@@ -11,7 +11,7 @@ public class Wolf : NpcBase
 {
     public override Shape GameObject { get; }
     
-    public override EntityType Type => EntityType.Wolf;
+    public override NpcType Type => NpcType.Wolf;
 
     public override float WanderingSpeed => 0.9f;
 
